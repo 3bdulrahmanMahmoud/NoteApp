@@ -4,10 +4,10 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:note_app/core/models/note_model.dart';
 import 'package:note_app/core/utlis/App_strings.dart';
 
-part 'notes_state.dart';
+part 'Add_notes_state.dart';
 
-class NotesCubit extends Cubit<NotesState> {
-  NotesCubit() : super(NotesInitial());
+class AddNotesCubit extends Cubit<NotesState> {
+  AddNotesCubit() : super(NotesInitial());
 
   addNote(NoteModel note) async {
     emit(AddNotesLoading());
