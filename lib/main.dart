@@ -5,6 +5,7 @@ import 'package:note_app/core/function/obreserver_cubit.dart';
 import 'package:note_app/core/models/note_model.dart';
 import 'package:note_app/core/routes/router.dart';
 import 'package:note_app/core/utlis/App_strings.dart';
+import 'package:note_app/features/home/cubit/note_cubit.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -20,10 +21,17 @@ class NotesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      routerConfig: router,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NoteCubit(),
+        )
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.dark(),
+        routerConfig: router,
+      ),
     );
   }
 }

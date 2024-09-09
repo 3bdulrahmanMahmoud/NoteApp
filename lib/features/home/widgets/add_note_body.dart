@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:note_app/core/models/note_model.dart';
 import 'package:note_app/features/home/cubit/Add_notes_cubit.dart';
+import 'package:note_app/features/home/cubit/note_cubit.dart';
 import 'package:note_app/features/home/widgets/Custom_button.dart';
 import 'package:note_app/features/home/widgets/Cutom_Text_field.dart';
 
@@ -21,17 +23,20 @@ class _AddNewNoteBodyState extends State<AddNewNoteBody> {
     return BlocConsumer<AddNotesCubit, NotesState>(
       listener: (context, state) {
         if (state is AddNotesSuccess) {
+          BlocProvider.of<NoteCubit>(context).fetchAllNotes();
           Navigator.pop(context);
         }
-        if (state is AddNotesFailure) {
-          print("failer ${state.errMessage}");
-        }
+        if (state is AddNotesFailure) {}
       },
       builder: (context, state) {
         return AbsorbPointer(
-          absorbing:state is AddNotesLoading?true:false,
+          absorbing: state is AddNotesLoading ? true : false,
           child: Container(
-            padding:  EdgeInsets.only(top: 20, left: 10, right: 10,bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 10,
+                right: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             width: double.infinity,
             child: Form(
               autovalidateMode: autovalidateMode,
@@ -64,11 +69,14 @@ class _AddNewNoteBodyState extends State<AddNewNoteBody> {
                           onTap: () {
                             if (formKey.currentState!.validate()) {
                               formKey.currentState!.save();
+                              var CurrentDate = DateTime.now();
+                              var formateCurrentDate =
+                                  DateFormat.yMd().format(CurrentDate);
                               var notemodel = NoteModel(
                                   color: Colors.blue.value,
                                   title: title!,
                                   subTitle: subTitle!,
-                                  data: DateTime.now.toString());
+                                  data: formateCurrentDate);
                               BlocProvider.of<AddNotesCubit>(context)
                                   .addNote(notemodel);
                             } else {
